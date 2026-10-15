@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabellenverlauf</title>
+<style>
+  :root {
+    --bg: #f6f7f4; --panel: #ffffff; --ink: #1d2320; --muted: #7b847f;
+    --grid: #e3e7e2; --pill: #1d2320; --pill-ink: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #151a17; --panel: #1d2420; --ink: #e9eeea; --muted: #8c968f;
+            --grid: #2a332e; --pill: #e9eeea; --pill-ink: #151a17; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif; }
+  body { padding: 8px; }
+  #bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0 2px 6px; }
+  h1 { font-size: 1rem; margin: 0; font-weight: 600; }
+  #myBtn { font: inherit; font-size: .85rem; padding: 4px 12px; border-radius: 999px;
+    border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+  #myBtn.on { background: var(--ink); color: var(--bg); }
+  #legend { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .75rem; color: var(--muted); }
+  #legend span { display: inline-flex; align-items: center; gap: 4px; }
+  #legend i { width: 11px; height: 11px; border-radius: 50%; border: 3px solid; display: inline-block; }
+  #wrap { display: flex; background: var(--panel); border-radius: 10px;
+    border: 1px solid var(--grid); overflow: hidden; }
+  #axis { flex: none; border-right: 1px solid var(--grid); background: var(--panel); }
+  #scroll { flex: 1; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+  svg { display: block; }
+  .rank-label { fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
+  .day-label  { fill: var(--muted); font-size: 11px; text-anchor: middle; }
+  .date-label { fill: var(--muted); font-size: 10px; text-anchor: middle; }
+  .grid-line  { stroke: var(--grid); stroke-width: 1; }
+  .path { fill: none; stroke-width: 2; stroke-linejoin: round; opacity: .4; }
+  .path.sel { stroke-width: 5; opacity: 1; }
+  .conn { stroke: var(--muted); stroke-width: 1.5; }
+  .resgrp { display: none; pointer-events: none; }
+  .resgrp.sel { display: block; }
+  .res-bg { fill: var(--pill); }
+  .res-tx { fill: var(--pill-ink); font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+  .fallback-tx { fill: #fff; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+  .team { cursor: pointer; }
+  .team, .path, .conn { transition: opacity .15s; }
+  .dim .team, .dim .path, .dim .conn { opacity: .18; }
+  .dim .team.sel, .dim .team.opp, .dim .path.sel, .dim .conn.sel { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .team, .path, .conn { transition: none; } }
+</style>
+</head>
+<body>
+<div id="bar">
+  <h1 id="title"></h1>
+  <button id="myBtn" type="button"></button>
+  <div id="legend"></div>
+</div>
+<div id="wrap">
+  <svg id="axis"></svg>
+  <div id="scroll"><svg id="chart"></svg></div>
+</div>
+
+<!-- ============ ERGEBNISSE ============
+     Dieser Block kann durch deine externe Datei ersetzt werden:
+     <script src="ergebnisse.js"></script>
+     Format: { "Datum": [[Heim, Gast, ToreHeim, ToreGast, "OT"?], ...], ... }
+     Reihenfolge der Schlüssel = Reihenfolge der Spieltage. -->
+<script>
+const ergebnisse = {
+  "17.09.2026": [
+      ["EBB","STR", 4, 2],
+  ],
+  "18.09.2026": [
+      ["KEC","WOB", 4, 8],
+      ["KEC","WOB", 4, 8],
+      ["NIT","AEV", 4, 1],
+      ["KEV","BHV", 1, 3],
+      ["IEC","ING", 3, 4],
+      ["RBM","MAN", 4, 3],
+      ["SWW","FRA", 0, 5],
+  ],
+  "20.09.2026": [
+      ["MAN","EBB", 4, 3],
+      ["BHV","IEC", 2, 1],
+      ["ING","NIT", 2, 6],
+      ["AEV","SWW", 7, 3],
+      ["STR","KEV", 3, 6],
+      ["WOB","RBM", 4, 3,"SO"],
+      ["KEC","FRA", 4, 3, "OT"],
+  ],
+  "22.09.2026": [
+      ["NIT","MAN", 5, 3],
+  ],
+  
+};
+</script>
+
+<script>
+/* ============ KONFIGURATION ============ */
+const myTeam = "RBM";                       // "Meine Mannschaft"
+
+const MEDAILLEN = {                       // Ringfarben je Spielausgang
+  gold:   "#d4af37",                      // Sieg nach 60 Min       (3 Punkte)
+  silber: "#aab4be",                      // Sieg nach Verlängerung (2 Punkte)
+  bronze: "#b87333",                      // Niederlage n. Verl.    (1 Punkt)
+  niete:  "#2b302d"                       // Niederlage             (0 Punkte)
+};
+
+const DATA = {
+  titel: "Tabellenverlauf",
+  logoPfad: "",                           // z.B. "logos/" -> logos/A.png
+  logoEndung: ".svg",
+  // Startreihenfolge (Platz 1 bis N) VOR dem 1. Spieltag
+  startTabelle: ["AEV","BHV","EBB","FRA","IEC","ING","KEC","KEV","MAN","NIT","RBM","STR","SWW","WOB"],
+  // Name + Farbe (Linie, Fallback-Kreis) je Mannschaft. Schlüssel = Kürzel = Logo-Dateiname
+  teams: {
+    AEV: { name: "Team A", farbe: "#222" },
+    BHV: { name: "Team B", farbe: "#ccc" },
+    EBB: { name: "Team C", farbe: "#ccc" },
+    FRA: { name: "Team D", farbe: "#333" },
+    IEC: { name: "Team E", farbe: "#ccc" },
+    ING: { name: "Team F", farbe: "#37c" },
+    KEC: { name: "Team G", farbe: "#CC9" },
+    KEV: { name: "Team H", farbe: "#cc6" },
+    MAN: { name: "Team I", farbe: "#0269a5" },
+    NIT: { name: "Team J", farbe: "#ccc" },
+    RBM: { name: "EHC Red Bull München", farbe: "#BB2B1B" },
+    STR: { name: "Team L", farbe: "#039" },
+    SWW: { name: "Team L", farbe: "#ccc" },
+    WOB: { name: "Team L", farbe: "#E80" }
+  },
+  spieltage: ergebnisse
+};
+
+// Objekt { "Datum": [Spiele] } in Datumsliste + Spieltage zerlegen (Array ohne Datum geht weiterhin)
+if (!Array.isArray(DATA.spieltage)) {
+  DATA.datum = Object.keys(DATA.spieltage);
+  DATA.spieltage = Object.values(DATA.spieltage);
+}
+
+/* ============ Layout ============ */
+const COL_W = 84, TOP = 44, AXIS_W = 62;
+const NS = "http://www.w3.org/2000/svg";
+let selected = null, uid = 0, selectFn = () => {};
+
+/* Punkte: 3 Sieg, 2 OT-Sieg, 1 OT-Niederlage, 0 Niederlage */
+function pointsOf(gh, ga, ot) {
+  const homeWin = gh > ga;
+  return homeWin ? [ot ? 2 : 3, ot ? 1 : 0] : [ot ? 1 : 0, ot ? 2 : 3];
+}
+const ringOf = p => [MEDAILLEN.niete, MEDAILLEN.bronze, MEDAILLEN.silber, MEDAILLEN.gold][p];
+
+/* "12.10.2026" oder "2026-10-12" -> "12.10."; sonstiger Text bleibt unverändert */
+const fmtDatum = s => {
+  let m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s); if (m) return `${m[3]}.${m[2]}.`;
+  m = /^(\d{1,2})\.(\d{1,2})\.\d{2,4}$/.exec(s); if (m) return `${m[1]}.${m[2]}.`;
+  return s;
+};
+
+function computeRanks(data) {
+  const ids = data.startTabelle, st = {};
+  ids.forEach(id => st[id] = { p: 0, gd: 0, gf: 0 });
+  let order = [...ids];
+  const before = [order];
+  data.spieltage.forEach(day => {
+    day.forEach(([h, a, gh, ga, ot]) => {
+      const [ph, pa] = pointsOf(gh, ga, !!ot);
+      st[h].p += ph; st[a].p += pa;
+      st[h].gf += gh; st[a].gf += ga;
+      st[h].gd += gh - ga; st[a].gd += ga - gh;
+    });
+    const prev = order;
+    order = [...order].sort((x, y) =>
+      st[y].p - st[x].p || st[y].gd - st[x].gd || st[y].gf - st[x].gf ||
+      prev.indexOf(x) - prev.indexOf(y));
+    before.push(order);
+  });
+  return before;
+}
+
+/* Intervalle (lo..hi) so auf Bahnen verteilen, dass sich nichts überlappt */
+function assignLanes(items) {
+  const ends = [];
+  [...items].sort((a, b) => a.lo - b.lo || a.hi - b.hi).forEach(it => {
+    let l = ends.findIndex(e => e < it.lo);
+    if (l < 0) { l = ends.length; ends.push(it.hi); } else ends[l] = it.hi;
+    it.lane = l;
+  });
+  return ends.length;
+}
+
+function el(name, attrs = {}, parent) {
+  const e = document.createElementNS(NS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+/* Logo-Bubble mit Ergebnisring und Fallback (Farbkreis + Kürzel) */
+function bubble(g, id, r, ring, sw) {
+  const t = DATA.teams[id], clipId = "c" + (uid++), inner = r - sw;
+  const cp = el("clipPath", { id: clipId }, g);
+  el("circle", { r: inner }, cp);
+  el("circle", { r: r - sw / 2, fill: "var(--panel)", stroke: ring, "stroke-width": sw }, g);
+  const base = el("circle", { r: inner, fill: t.farbe }, g);
+  const fs = id.length >= 3 ? r * 0.62 : id.length === 2 ? r * 0.8 : r;
+  const letter = el("text", { class: "fallback-tx", "font-size": Math.round(fs * 10) / 10 }, g);
+  letter.textContent = id;
+  const img = el("image", {
+    href: DATA.logoPfad + id + DATA.logoEndung,
+    x: -inner, y: -inner, width: 2 * inner, height: 2 * inner,
+    "clip-path": `url(#${clipId})`, preserveAspectRatio: "xMidYMid slice"
+  }, g);
+  img.addEventListener("load", () => { base.remove(); letter.remove(); });
+  img.addEventListener("error", () => img.remove());
+}
+
+function buildChrome() {
+  document.getElementById("title").textContent = DATA.titel;
+  const btn = document.getElementById("myBtn");
+  btn.textContent = "★ " + DATA.teams[myTeam].name;
+  btn.onclick = ev => { ev.stopPropagation(); selectFn(selected === myTeam ? null : myTeam); };
+  const items = [["gold", "Sieg"], ["silber", "Sieg n. V."], ["bronze", "Niederl. n. V."], ["niete", "Niederlage"]];
+  document.getElementById("legend").innerHTML = items.map(([k, t]) =>
+    `<span><i style="border-color:${MEDAILLEN[k]}"></i>${t}</span>`).join("");
+}
+
+function render() {
+  const before = computeRanks(DATA);
+  const days = DATA.spieltage.length, N = DATA.startTabelle.length, cols = days + 1;
+
+  // Höhe so wählen, dass die Tabelle auf den Bildschirm passt
+  const wrap = document.getElementById("wrap");
+  const top = wrap.getBoundingClientRect().top + window.scrollY;
+  const avail = window.innerHeight - top - 14;
+  const ROW_H = Math.max(20, Math.floor((avail - TOP) / N));
+  const R = Math.max(8, Math.min(16, Math.floor(ROW_H * 0.42)));
+  const SW = Math.max(2, Math.round(R * 0.2));
+  const H = TOP + N * ROW_H + 4;
+  const W = cols * COL_W;
+
+  const rank = (c, id) => before[c].indexOf(id);
+  const x = c => COL_W * (c + 0.5);
+  const y = r => TOP + ROW_H * (r + 0.5);
+
+  /* --- Bahnen & Ergebnisse je Spieltag --- */
+  const matchLanes = [], offTeam = [], transOff = [], res = [];
+  const laneSp = 7;
+  for (let c = 0; c < days; c++) {
+    const items = DATA.spieltage[c].map(([h, a, gh, ga, ot]) => {
+      const rh = rank(c, h), ra = rank(c, a);
+      return { h, a, gh, ga, ot: ot||"", lo: Math.min(rh, ra), hi: Math.max(rh, ra) };
+    });
+    const n = assignLanes(items);
+    offTeam[c] = {}; res[c] = {};
+    items.forEach(it => {
+      it.off = (it.lane - (n - 1) / 2) * laneSp;
+      offTeam[c][it.h] = offTeam[c][it.a] = it.off;
+      const [ph, pa] = pointsOf(it.gh, it.ga, it.ot);
+      res[c][it.h] = ph; res[c][it.a] = pa;
+    });
+    matchLanes[c] = items;
+    const moves = DATA.startTabelle.map(id => {
+      const r0 = rank(c, id), r1 = rank(c + 1, id);
+      return { id, lo: Math.min(r0, r1), hi: Math.max(r0, r1), moves: r0 !== r1 };
+    }).filter(m => m.moves);
+    const nt = assignLanes(moves);
+    const sp = Math.min(4, (COL_W * 0.35) / Math.max(nt, 1));
+    transOff[c] = {};
+    moves.forEach(m => transOff[c][m.id] = (m.lane - (nt - 1) / 2) * sp);
+  }
+  offTeam[days] = {};
+
+  /* --- Linke Achse (bleibt beim Scrollen stehen) --- */
+  const ax = document.getElementById("axis");
+  ax.setAttribute("width", AXIS_W); ax.setAttribute("height", H);
+  ax.innerHTML = "";
+  const rankFs = Math.min(13, Math.max(9, ROW_H * 0.4)), AR = Math.min(R, 13);
+  for (let r = 0; r < N; r++) {
+    el("line", { x1: 0, x2: AXIS_W, y1: y(r), y2: y(r), class: "grid-line" }, ax);
+    el("text", { x: 14, y: y(r), class: "rank-label", "font-size": rankFs }, ax).textContent = r + 1;
+    const id = before[days][r];
+    const g = el("g", { transform: `translate(${AXIS_W - 6 - AR},${y(r)})` }, ax);
+    bubble(g, id, AR, DATA.teams[id].farbe, 2);
+  }
+  el("text", { x: AXIS_W / 2, y: 26, class: "day-label" }, ax).textContent = "Stand";
+
+  /* --- Hauptdiagramm --- */
+  const svg = document.getElementById("chart");
+  svg.setAttribute("width", W); svg.setAttribute("height", H);
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.innerHTML = "";
+  for (let r = 0; r < N; r++)
+    el("line", { x1: 0, x2: W, y1: y(r), y2: y(r), class: "grid-line" }, svg);
+  for (let c = 0; c < cols; c++) {
+    el("text", { x: x(c), y: 18, class: "day-label" }, svg).textContent = c < days ? c + 1 : "Ende";
+    const dt = DATA.datum && DATA.datum[c];
+    if (c < days && dt) el("text", { x: x(c), y: 32, class: "date-label" }, svg).textContent = fmtDatum(dt);
+  }
+
+  const gPaths = el("g", {}, svg), gConn = el("g", {}, svg),
+        gTeams = el("g", {}, svg), gRes = el("g", {}, svg);
+  const pathEls = {}, connEls = [], teamEls = [], pills = [], teamAt = [];
+
+  DATA.startTabelle.forEach(id => {
+    const px = c => x(c) + (offTeam[c][id] || 0);
+    let d = `M ${px(0)} ${y(rank(0, id))}`;
+    for (let c = 0; c < days; c++) {
+      const y0 = y(rank(c, id)), y1 = y(rank(c + 1, id));
+      const xm = x(c) + COL_W / 2 + (transOff[c][id] || 0);
+      d += ` L ${xm} ${y0} L ${xm} ${y1} L ${px(c + 1)} ${y1}`;
+    }
+    pathEls[id] = el("path", { d, class: "path", stroke: DATA.teams[id].farbe }, gPaths);
+  });
+
+  const pillH = Math.min(18, Math.max(13, ROW_H * 0.6)), pillFs = Math.round(pillH * 0.62);
+  matchLanes.forEach((items, c) => items.forEach(it => {
+    const yh = y(rank(c, it.h)), ya = y(rank(c, it.a)), cx = x(c) + it.off;
+    const line = el("line", { x1: cx, x2: cx, y1: yh, y2: ya, class: "conn" }, gConn);
+    line.dataset.ids = it.h + "," + it.a;
+    connEls.push(line);
+    const g = el("g", { class: "resgrp" }, gRes);
+    const rect = el("rect", { y: (yh + ya) / 2 - pillH / 2, height: pillH, rx: pillH / 2, class: "res-bg" }, g);
+    const text = el("text", { x: cx, y: (yh + ya) / 2, class: "res-tx", "font-size": pillFs }, g);
+    pills.push({ g, rect, text, cx, c, it });
+  }));
+
+  for (let c = 0; c < cols; c++) {
+    teamAt[c] = {};
+    const playing = new Set(c < days ? matchLanes[c].flatMap(m => [m.h, m.a]) : DATA.startTabelle);
+    DATA.startTabelle.forEach(id => {
+      const cx = x(c) + (offTeam[c][id] || 0), cy = y(rank(c, id));
+      const g = el("g", { class: "team" }, gTeams);
+      g.dataset.id = id; g.dataset.cx = cx; g.dataset.cy = cy;
+      g.dataset.dot = playing.has(id) ? "0" : "1";
+      el("title", {}, g).textContent = DATA.teams[id].name;
+      if (playing.has(id)) {
+        if (c < days) { const p = res[c][id]; bubble(g, id, R, ringOf(p), p === 0 ? Math.max(1.5, SW - 1) : SW); }
+        else bubble(g, id, R, "var(--muted)", Math.max(1.5, SW - 1));
+      } else {
+        el("circle", { r: 2.5, fill: DATA.teams[id].farbe }, g);
+        el("circle", { r: 8, fill: "transparent" }, g);      // größere Tipp-Fläche
+      }
+      g.setAttribute("transform", `translate(${cx},${cy})`);
+      g.addEventListener("click", ev => { ev.stopPropagation(); select(selected === id ? null : id); });
+      teamEls.push(g); teamAt[c][id] = g;
+    });
+  }
+
+  /* --- Auswahl: Mannschaft groß, Gegner mittel, Ergebnisse sichtbar --- */
+  function setScale(g, k) {
+    g.setAttribute("transform", `translate(${g.dataset.cx},${g.dataset.cy}) scale(${k})`);
+  }
+  function select(id) {
+    selected = id;
+    svg.classList.toggle("dim", !!id);
+    document.getElementById("myBtn").classList.toggle("on", id === myTeam);
+    teamEls.forEach(g => { g.classList.remove("sel", "opp"); setScale(g, 1); });
+    pills.forEach(p => p.g.classList.remove("sel"));
+    connEls.forEach(e => e.classList.toggle("sel", !!id && e.dataset.ids.split(",").includes(id)));
+    Object.entries(pathEls).forEach(([k, p]) => {
+      p.classList.toggle("sel", k === id);
+      if (k === id) gPaths.appendChild(p);
+    });
+    if (!id) return;
+    pills.forEach(p => {
+      const { h, a, gh, ga, ot } = p.it;
+      if (h !== id && a !== id) return;
+      const own = h === id ? gh : ga, opp = h === id ? ga : gh;
+      const og = teamAt[p.c][h === id ? a : h];
+      og.classList.add("opp"); setScale(og, 1.35); gTeams.appendChild(og);
+      const txt = `${own}:${opp}${ot ? ot : ""}`, w = 10 + txt.length * pillFs * 0.62;
+      p.text.textContent = txt;
+      p.rect.setAttribute("x", p.cx - w / 2); p.rect.setAttribute("width", w);
+      p.g.classList.add("sel");
+    });
+    teamEls.filter(g => g.dataset.id === id).forEach(g => {
+      g.classList.add("sel"); setScale(g, g.dataset.dot === "1" ? 2.2 : 1.8); gTeams.appendChild(g);
+    });
+  }
+  selectFn = select;
+  document.getElementById("wrap").onclick = () => select(null);
+  select(selected);
+}
+
+buildChrome();
+render();
+document.getElementById("scroll").scrollLeft = 1e6;   // zuletzt gespielte Spieltage zeigen
+let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => {
+  const s = document.getElementById("scroll"), l = s.scrollLeft; render(); s.scrollLeft = l; }, 150); });
+</script>
+</body>
+</html>
