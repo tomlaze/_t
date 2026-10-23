@@ -19,9 +19,62 @@
   body { padding: 8px; }
   #bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0 2px 6px; }
   h1 { font-size: 1rem; margin: 0; font-weight: 600; }
-  #myBtn { font: inherit; font-size: .85rem; padding: 4px 12px; border-radius: 999px;
+  #ladBtn { font: inherit; font-size: .8rem; padding: 4px 12px; border-radius: 999px;
     border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
-  #myBtn.on { background: var(--ink); color: var(--bg); }
+  #ladBtn:disabled { opacity: .4; cursor: default; }
+  .cd { margin-top: 6px; font-weight: 700; font-variant-numeric: tabular-nums; color: #c1121f; }
+  #mode { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
+  #mode button { font: inherit; font-size: .8rem; padding: 4px 11px; border: 0; background: transparent;
+    color: var(--ink); cursor: pointer; }
+  #mode button.on { background: var(--ink); color: var(--bg); }
+  .axrow { fill: var(--ink); opacity: 0; }
+  .axrow.sel { opacity: .14; }
+  #panel { padding: 10px; overflow-y: auto; font-size: .85rem; }
+  #panel[hidden] { display: none; }
+  .pn-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .pn-head b { font-size: 1rem; } .pn-head small { display: block; color: var(--muted); }
+  .card { border: 1px solid var(--grid); border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+  .card h3 { margin: 0 0 8px; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  .fx { display: flex; align-items: center; gap: 8px; font-weight: 600; flex-wrap: wrap; }
+  .fx small { color: var(--muted); font-weight: 400; }
+  table.cmp { width: 100%; border-collapse: collapse; margin-top: 8px; text-align: center; }
+  .cmp th, .cmp td { padding: 3px 4px; } .cmp th { color: var(--muted); font-weight: 400; }
+  .cmp td:first-child { text-align: left; color: var(--muted); }
+  .row { display: flex; gap: 10px; padding: 6px 0 6px 10px; border-left: 4px solid var(--grid); margin-bottom: 6px; align-items: flex-start; }
+  .row.hot { border-left-color: #c1121f; } .row.warm { border-left-color: #f2a900; } .row.far { border-left-color: var(--muted); }
+  .lk { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .72rem; color: var(--muted); margin-bottom: 8px; }
+  .lk i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
+  .cmp .sep { border-left: 1px solid var(--grid); }
+  .tg { margin-left: auto; font: inherit; font-size: .75rem; padding: 3px 10px; border-radius: 999px;
+    border: 1.5px solid var(--muted); background: transparent; color: var(--ink); cursor: pointer; }
+  .lst { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  .lst th { color: var(--muted); font-weight: 400; font-size: .7rem; text-align: center; padding: 2px 3px; }
+  .lst td { padding: 4px 3px; text-align: center; border-top: 1px solid var(--grid); white-space: nowrap; }
+  .lst td.tm { text-align: left; padding-left: 8px; }
+  .lst .tmi { display: inline-flex; align-items: center; gap: 6px; }
+  .lst .gp { color: var(--muted); font-weight: 400; font-size: .7rem; }
+  .chip { display: inline-block; min-width: 28px; padding: 1px 6px; border-radius: 6px; font-weight: 600; }
+  .c-red { background: #c1121f; color: #fff; } .c-orange { background: #f08a24; color: #1d2320; }
+  .c-yellow { background: #f2c94c; color: #1d2320; } .c-green { background: #2e9e5b; color: #fff; }
+  .c-grey { background: var(--grid); color: var(--muted); }
+  .t-green { color: #2e9e5b; } .t-red { color: #d62839; } .t-grey { color: var(--muted); }
+  .lst tr.wir td { background: var(--grid); font-weight: 600; }
+  .lst tr.det td { text-align: left; white-space: normal; border-top: 0; padding: 0 4px 6px 8px; color: var(--muted); font-size: .75rem; }
+  .row .l1 { font-weight: 600; } .row .l2, .row .l3 { color: var(--muted); font-size: .8rem; margin-top: 1px; }
+  .note { color: var(--muted); font-size: .75rem; margin: 6px 0 0; }
+  .lg { position: relative; width: var(--s); height: var(--s); border-radius: 50%; background: var(--c); flex: none;
+    display: inline-flex; align-items: center; justify-content: center; overflow: hidden; color: #fff;
+    font-weight: 700; font-size: calc(var(--s) * .34); }
+  .lg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #debug { margin: 0 2px 6px; padding: 8px; font-size: .7rem; white-space: pre-wrap; word-break: break-all;
+    max-height: 38vh; overflow: auto; border: 1px solid #c1121f; border-radius: 8px; background: var(--panel); color: var(--ink); }
+  #lizenz { margin: 8px 2px 0; font-size: .68rem; color: var(--muted); text-align: center; }
+  #lizenz a { color: inherit; }
+  .fut-band { fill: var(--ink); opacity: .05; }
+  #status { font-size: .72rem; color: var(--muted); }
+  #reload { font: inherit; font-size: .9rem; line-height: 1; padding: 3px 9px; border-radius: 999px;
+    border: 1.5px solid var(--muted); background: transparent; color: var(--ink); cursor: pointer; }
+  #reload:disabled { opacity: .4; }
   #legend { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .75rem; color: var(--muted); }
   #legend span { display: inline-flex; align-items: center; gap: 4px; }
   #legend i { width: 11px; height: 11px; border-radius: 50%; border: 3px solid; display: inline-block; }
@@ -52,86 +105,27 @@
 <body>
 <div id="bar">
   <h1 id="title"></h1>
-  <button id="myBtn" type="button"></button>
+  <div id="mode"><button type="button" data-m="team">Mannschaft</button><button type="button" data-m="date">Datum</button><button type="button" data-m="game">Spieltag</button><button type="button" data-m="ladder">Leiter</button></div>
+  <button id="ladBtn" type="button" hidden></button>
   <div id="legend"></div>
+  <span id="status"></span><button id="reload" type="button" title="Neu laden">↻</button>
 </div>
+<pre id="debug" hidden></pre>
 <div id="wrap">
   <svg id="axis"></svg>
-  <div id="scroll"><svg id="chart"></svg></div>
+  <div id="scroll"><svg id="chart"></svg><div id="panel" hidden></div></div>
 </div>
-
-<!-- ============ ERGEBNISSE ============
-     Dieser Block kann durch deine externe Datei ersetzt werden:
-     <script src="ergebnisse.js"></script>
-     Format: { "Datum": [[Heim, Gast, ToreHeim, ToreGast, "OT"?], ...], ... }
-     Reihenfolge der Schlüssel = Reihenfolge der Spieltage. -->
-<script>
-const ergebnisse = {
-  "17.09.2026": [
-      ["EBB","STR", 4, 2],
-  ],
-  "18.09.2026": [
-      ["KEC","WOB", 4, 8],
-      ["KEC","WOB", 4, 8],
-      ["NIT","AEV", 4, 1],
-      ["KEV","BHV", 1, 3],
-      ["IEC","ING", 3, 4],
-      ["RBM","MAN", 4, 3],
-      ["SWW","FRA", 0, 5],
-  ],
-  "20.09.2026": [
-      ["MAN","EBB", 4, 3],
-      ["BHV","IEC", 2, 1],
-      ["ING","NIT", 2, 6],
-      ["AEV","SWW", 7, 3],
-      ["STR","KEV", 3, 6],
-      ["WOB","RBM", 4, 3," SO"],
-      ["KEC","FRA", 4, 3, " OT"],
-  ],
-  "22.09.2026": [
-      ["NIT","MAN", 5, 3],
-  ],
-   "24.09.2026": [
-      ["IEC","AEV", 2, 3, " SO"],
-  ],
-  "25.09.2026": [
-      ["KEC","EBB", 5, 6, " SO"],
-      ["FRA","NIT", 1, 2],
-      ["MAN","KEV", 4, 1],
-      ["BHV","RBM", 1, 4],
-      ["STR","ING", 4, 1],
-      ["WOB","SWW", 3, 4," OT"],  
-  ],
-   "27.09.2026": [
-      ["EBB","IEC", 4, 0],
-      ["RBM","FRA", 1, 4],
-      ["WOB","BHV", 3, 2],
-      ["NIT","STR", 2, 3, " SO"],
-      ["KEV","SWW", 5, 2],
-      ["AEV","KEC", 4, 6],
-      ["ING","MAN", 3, 2, " OT"],
-  ],
-  
-  
-  
-  
-  "01.10.2026": [ 
-         ["MAN", "IEC", 6, 1] 
-    ], "02.10.2026": [ ["AEV", "WOB", 5, 2], ["STR", "BHV", 4, 3], ["KEC", "RBM", 2, 4], ["FRA", "EBB", 0, 2], ["KEV", "ING", 3, 1], ["NIT", "SWW", 5, 0] ], "04.10.2026": [ ["EBB", "NIT", 4, 1], ["BHV", "FRA", 2, 1], ["SWW", "STR", 2, 4], ["ING", "KEC", 3, 6], ["IEC", "KEV", 3, 2], ["WOB", "MAN", 4, 1], ["RBM", "AEV", 4, 2] ], "08.10.2026": [ ["FRA", "KEV", 2, 5] ], "09.10.2026": [ ["STR", "IEC", 11, 4], ["RBM", "ING", 1, 5], ["NIT", "MAN", 2, 5], ["AEV", "BHV", 3, 0], ["EBB", "WOB", 5, 0], ["KEC", "SWW", 1, 4] ], "11.10.2026": [ ["KEV", "AEV", 1, 2], ["ING", "FRA", 2, 3], ["KEC", "NIT", 4, 2], ["BHV", "EBB", 0, 3], ["IEC", "WOB", 3, 2], ["SWW", "RBM", 3, 4], ["MAN", "STR", 2, 1] ], 
-    
-  
-  
-  
-  
-  
-  
-  
-};
-</script>
+<p id="lizenz">Daten von OpenLigaDB (<a href="https://www.openligadb.de" target="_blank" rel="noopener">www.openligadb.de</a>), lizenziert unter <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL 1.0</a></p>
 
 <script>
 /* ============ KONFIGURATION ============ */
-const myTeam = "RBM";                       // "Meine Mannschaft"
+const AUFHOL_PUNKTE = 6;                  // Aufholjagd: Mannschaften bis zu so vielen Punkten Abstand anzeigen
+
+/* ---- Datenquelle: OpenLigaDB ---- */
+const LIGA = "del", SAISON = 2026;
+const API_URL = `https://api.openligadb.de/getmatchdata/${LIGA}/${SAISON}/`;
+const LOGO_LOKAL = true;                  // true: erst lokale Datei (z.B. RBM.svg), dann Logo aus der API | false: nur API
+const STARTTABELLE = null;                // optional feste Startreihenfolge, z.B. ["EBB","RBM",...]; null = alphabetisch
 
 const MEDAILLEN = {                       // Ringfarben je Spielausgang
   gold:   "#d4af37",                      // Sieg nach 60 Min       (3 Punkte)
@@ -140,42 +134,61 @@ const MEDAILLEN = {                       // Ringfarben je Spielausgang
   niete:  "#2b302d"                       // Niederlage             (0 Punkte)
 };
 
+// Mannschaftsfarben (Linie, Fallback-Kreis). Schlüssel = Kürzel aus der API. Unbekannte Kürzel bekommen eine Ersatzfarbe.
+const FARBEN = {
+  AEV: "#222", BHV: "#ccc", EBB: "#ccc", FRA: "#333", IEC: "#ccc", ING: "#37c", KEC: "#CC9",
+  KEV: "#cc6", MAN: "#0269a5", NIT: "#ccc", RBM: "#BB2B1B", STR: "#039", SWW: "#ccc", WOB: "#E80"
+};
+const PALETTE = ["#e4572e", "#2e86ab", "#f2a900", "#3fa34d", "#8e5ea2", "#d1478f", "#00897b", "#6d7a8a"];
+
 const DATA = {
   titel: "Tabellenverlauf",
-  logoPfad: "",                           // z.B. "logos/" -> logos/A.png
+  logoPfad: "",                           // z.B. "logos/" -> logos/AEV.svg
   logoEndung: ".svg",
-  // Startreihenfolge (Platz 1 bis N) VOR dem 1. Spieltag
-  startTabelle: ["AEV","BHV","EBB","FRA","IEC","ING","KEC","KEV","MAN","NIT","RBM","STR","SWW","WOB"],
-  // Name + Farbe (Linie, Fallback-Kreis) je Mannschaft. Schlüssel = Kürzel = Logo-Dateiname
-  teams: {
-    AEV: { name: "Team A", farbe: "#222" },
-    BHV: { name: "Team B", farbe: "#ccc" },
-    EBB: { name: "Team C", farbe: "#ccc" },
-    FRA: { name: "Team D", farbe: "#333" },
-    IEC: { name: "Team E", farbe: "#ccc" },
-    ING: { name: "Team F", farbe: "#37c" },
-    KEC: { name: "Team G", farbe: "#CC9" },
-    KEV: { name: "Team H", farbe: "#cc6" },
-    MAN: { name: "Team I", farbe: "#0269a5" },
-    NIT: { name: "Team J", farbe: "#ccc" },
-    RBM: { name: "EHC Red Bull München", farbe: "#BB2B1B" },
-    STR: { name: "Team L", farbe: "#039" },
-    SWW: { name: "Team L", farbe: "#ccc" },
-    WOB: { name: "Team L", farbe: "#E80" }
-  },
-  spieltage: ergebnisse
+  startTabelle: [], teams: {}, spieltage: [], datum: [], offen: []
 };
 
-// Objekt { "Datum": [Spiele] } in Datumsliste + Spieltage zerlegen (Array ohne Datum geht weiterhin)
-if (!Array.isArray(DATA.spieltage)) {
-  DATA.datum = Object.keys(DATA.spieltage);
-  DATA.spieltage = Object.values(DATA.spieltage);
+/* API -> kompaktes Paket { teams, ergebnisse: { "TT.MM.JJJJ": [[Heim, Gast, ToreH, ToreG, "OT"|"SO"], ...] } }
+   Endstand = letztes Ergebnis des Spiels (60 Min, Verlängerung oder Penaltys). Ungespielte Spiele: nur [Heim, Gast]. */
+function apiToPack(json) {
+  const teams = {}, ergebnisse = {};
+  [...json].sort((x, z) => String(x.matchDateTimeUTC || x.matchDateTime).localeCompare(String(z.matchDateTimeUTC || z.matchDateTime)))
+    .forEach(m => {
+      const h = m.team1.shortName, a = m.team2.shortName;
+      teams[h] = { name: m.team1.teamName, logo: m.team1.teamIconUrl };
+      teams[a] = { name: m.team2.teamName, logo: m.team2.teamIconUrl };
+      const [yy, mm, dd] = m.matchDateTime.slice(0, 10).split("-");
+      const key = `${dd}.${mm}.${yy}`, entry = [h, a];
+      const res = (m.matchResults || []).slice().sort((x, z) => z.resultOrderID - x.resultOrderID)[0];
+      if (m.matchIsFinished && res) {
+        entry.push(res.pointsTeam1, res.pointsTeam2);
+        if (res.resultTypeKind === "AfterPenalties") entry.push("SO");
+        else if (res.resultTypeKind === "AfterExtraTime") entry.push("OT");
+      } else entry.push(null, null, "", m.matchDateTimeUTC || "");   // offen: Anstoßzeit (UTC) an Position 5
+      (ergebnisse[key] = ergebnisse[key] || []).push(entry);
+    });
+  return { teams, ergebnisse };
+}
+
+function setData(pack) {
+  const ids = Object.keys(pack.teams).sort();
+  DATA.startTabelle = STARTTABELLE && STARTTABELLE.length === ids.length && STARTTABELLE.every(id => pack.teams[id]) ? [...STARTTABELLE] : ids;
+  DATA.teams = {};
+  ids.forEach((id, i) => DATA.teams[id] = { name: pack.teams[id].name, logo: pack.teams[id].logo, farbe: FARBEN[id] || PALETTE[i % PALETTE.length] });
+  const keys = Object.keys(pack.ergebnisse), days = keys.map(k => pack.ergebnisse[k].map(m => m.slice()));
+  const isPlayed = m => Number.isFinite(m[2]) && Number.isFinite(m[3]);
+  DATA.offen = [];   // noch nicht gespielte Begegnungen (ohne Tore), chronologisch
+  days.forEach((day, i) => day.forEach(m => { if (!isPlayed(m)) DATA.offen.push({ datum: keys[i], h: m[0], a: m[1], utc: m[5] || "" }); }));
+  const played = days.map(day => day.filter(isPlayed)), keep = played.map(d => d.length > 0);
+  DATA.spieltage = played.filter((_, i) => keep[i]);
+  DATA.datum = keys.filter((_, i) => keep[i]);
+  if (selected && !DATA.teams[selected]) selected = null;
 }
 
 /* ============ Layout ============ */
 const COL_W = 84, TOP = 44, AXIS_W = 62;
 const NS = "http://www.w3.org/2000/svg";
-let selected = null, uid = 0, selectFn = () => {};
+let selected = null, uid = 0, selectFn = () => {}, mode = "team", panelDetails = false, ladderPair = false;
 
 /* Punkte: 3 Sieg, 2 OT-Sieg, 1 OT-Niederlage, 0 Niederlage */
 function pointsOf(gh, ga, ot) {
@@ -191,25 +204,245 @@ const fmtDatum = s => {
   return s;
 };
 
-function computeRanks(data) {
-  const ids = data.startTabelle, st = {};
-  ids.forEach(id => st[id] = { p: 0, gd: 0, gf: 0 });
+/* ============ Datenmodell ============
+   "date": eine Spalte je Spieltermin; Kreis steht auf dem Platz VOR dem Spiel, letzte Spalte "Ende"
+   "game": Spalte n = Tabelle nach dem n-ten Spiel jeder Mannschaft (wer noch kein n-tes Spiel hat: ausgegraut) */
+const newStats = () => { const st = {}; DATA.startTabelle.forEach(id => st[id] = { p: 0, gd: 0, gf: 0, ga: 0, gp: 0 }); return st; };
+const addGame = (st, id, own, opp, pts) => { st[id].p += pts; st[id].gf += own; st[id].ga += opp; st[id].gd += own - opp; st[id].gp++; };
+const sortOrder = (st, prev) => [...prev].sort((x, y) =>
+  st[y].p - st[x].p || st[y].gd - st[x].gd || st[y].gf - st[x].gf || prev.indexOf(x) - prev.indexOf(y));
+
+function buildModel(mode) {
+  const ids = DATA.startTabelle;
   let order = [...ids];
-  const before = [order];
-  data.spieltage.forEach(day => {
-    day.forEach(([h, a, gh, ga, ot]) => {
-      const [ph, pa] = pointsOf(gh, ga, !!ot);
-      st[h].p += ph; st[a].p += pa;
-      st[h].gf += gh; st[a].gf += ga;
-      st[h].gd += gh - ga; st[a].gd += ga - gh;
+  const before = [order], tg = [], matches = [];
+  if (mode === "date") {
+    const st = newStats();
+    DATA.spieltage.forEach(day => {
+      const t = {};
+      day.forEach(([h, a, gh, ga, ot]) => {
+        const [ph, pa] = pointsOf(gh, ga, !!ot);
+        addGame(st, h, gh, ga, ph); addGame(st, a, ga, gh, pa);
+        t[h] = { pts: ph, own: gh, opp: ga, ot, oppId: a };
+        t[a] = { pts: pa, own: ga, opp: gh, ot, oppId: h };
+      });
+      tg.push(t); matches.push(day);
+      order = sortOrder(st, order); before.push(order);
     });
-    const prev = order;
-    order = [...order].sort((x, y) =>
-      st[y].p - st[x].p || st[y].gd - st[x].gd || st[y].gf - st[x].gf ||
-      prev.indexOf(x) - prev.indexOf(y));
-    before.push(order);
+    const P = tg.length, fut = futureColumns();
+    if (!fut.length) return { before, cols: P + 1, finalCol: true, tg, matches, datum: DATA.datum };
+    fut.forEach((col, j) => {                       // Ausblick-Spalten: Stand bleibt wie er ist
+      const t = {};
+      col.fixtures.forEach(fx => {
+        t[fx.h] = { future: true, oppId: fx.a, utc: fx.utc, datum: fx.datum };
+        t[fx.a] = { future: true, oppId: fx.h, utc: fx.utc, datum: fx.datum };
+      });
+      tg.push(t); matches.push(col.fixtures.map(fx => [fx.h, fx.a, undefined, undefined, "", fx.utc]));
+      if (j > 0) before.push(order);
+    });
+    return { before, cols: P + fut.length, finalCol: false, futureFrom: P, tg, matches,
+             datum: DATA.datum.concat(fut.map(c => c.datum)) };
+  }
+  const games = {}; ids.forEach(id => games[id] = []);
+  DATA.spieltage.forEach(day => day.forEach(([h, a, gh, ga, ot]) => {
+    const [ph, pa] = pointsOf(gh, ga, !!ot);
+    games[h].push({ pts: ph, own: gh, opp: ga, ot, oppId: a });
+    games[a].push({ pts: pa, own: ga, opp: gh, ot, oppId: h });
+  }));
+  const maxN = Math.max(0, ...ids.map(id => games[id].length));
+  if (maxN === 0) return { before: [order], cols: 1, finalCol: true, tg: [], matches: [], datum: null };
+  const nextF = {}; ids.forEach(id => nextF[id] = nextFx(id));
+  const colsN = maxN + (ids.some(id => games[id].length === maxN && nextF[id]) ? 1 : 0);   // +1 Spalte für das nächste Spiel
+  for (let n = 1; n <= colsN; n++) {
+    const st = newStats();
+    ids.forEach(id => games[id].slice(0, n).forEach(g => addGame(st, id, g.own, g.opp, g.pts)));
+    const t = {};
+    ids.forEach(id => {
+      if (games[id][n - 1]) t[id] = games[id][n - 1];
+      else if (n === games[id].length + 1 && nextF[id]) {      // nächstes (noch offenes) Spiel dieser Mannschaft
+        const f = nextF[id];
+        t[id] = { future: true, oppId: f.h === id ? f.a : f.h, utc: f.utc, datum: f.datum };
+      }
+    });
+    tg.push(t); matches.push([]);
+    order = sortOrder(st, order); before.push(order);
+  }
+  before.shift();                                   // Startreihenfolge gehört nicht zu den Spalten
+  return { before, cols: colsN, finalCol: false, tg, matches, datum: null };
+}
+
+/* Aktueller Tabellenstand (alle gespielten Spiele) */
+/* Nächstes (noch nicht gespieltes) Spiel einer Mannschaft; sehr alte, nie beendete Spiele (verlegt) überspringen */
+function nextFx(t) {
+  const list = (DATA.offen || []).filter(f => f.h === t || f.a === t);
+  return list.find(f => !f.utc || new Date(f.utc).getTime() > Date.now() - 4 * 3600e3) || list[0];
+}
+/* Ausblick: Begegnungen, die für mindestens eine Mannschaft das nächste Spiel sind, nach Datum gruppiert */
+function futureColumns() {
+  const next = new Set();
+  DATA.startTabelle.forEach(t => { const f = nextFx(t); if (f) next.add(f); });
+  const cols = [];
+  (DATA.offen || []).filter(f => next.has(f)).forEach(f => {
+    let c = cols.find(x => x.datum === f.datum);
+    if (!c) cols.push(c = { datum: f.datum, fixtures: [] });
+    c.fixtures.push(f);
   });
-  return before;
+  return cols;
+}
+const tagBerlin = d => d.toLocaleDateString("sv-SE", { timeZone: "Europe/Berlin" });
+const uhrBerlin = d => d.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Berlin" });
+function tickCountdown() {
+  const e = document.getElementById("cd");
+  if (!e) return;
+  const ms = new Date(e.dataset.utc).getTime() - Date.now(), p = n => String(n).padStart(2, "0");
+  if (ms > 0) {
+    const h = Math.floor(ms / 3600e3), m = Math.floor(ms % 3600e3 / 60e3), sec = Math.floor(ms % 60e3 / 1e3);
+    e.textContent = `Anpfiff in ${h ? h + " Std " : ""}${p(m)} Min ${p(sec)} s`;
+  } else e.textContent = ms > -3 * 3600e3 ? "Das Spiel läuft" : "";
+}
+setInterval(tickCountdown, 1000);
+
+function currentStats() {
+  const st = newStats();
+  DATA.spieltage.forEach(day => day.forEach(([h, a, gh, ga, ot]) => {
+    const [ph, pa] = pointsOf(gh, ga, !!ot);
+    addGame(st, h, gh, ga, ph); addGame(st, a, ga, gh, pa);
+  }));
+  return st;
+}
+
+/* Stand, wenn jede Mannschaft nur ihre ersten n Spiele hätte */
+function statsAtN(n) {
+  const st = newStats();
+  DATA.spieltage.forEach(day => day.forEach(([h, a, gh, ga, ot]) => {
+    const [ph, pa] = pointsOf(gh, ga, !!ot);
+    if (st[h].gp < n) addGame(st, h, gh, ga, ph);
+    if (st[a].gp < n) addGame(st, a, ga, gh, pa);
+  }));
+  return st;
+}
+
+/* ============ Mannschafts-Ansicht ============ */
+const sg = v => (v > 0 ? "+" : "") + v;
+const logoSrcs = id => {
+  const loc = DATA.logoPfad + id + DATA.logoEndung, api = (DATA.teams[id] || {}).logo || "";
+  return LOGO_LOKAL ? [loc, api] : [api || loc, ""];
+};
+function logoHTML(id, size) {
+  const [s1, s2] = logoSrcs(id);
+  const t = DATA.teams[id];
+  return `<span class="lg" style="--c:${t.farbe};--s:${size}px"><span>${id}</span>` +
+    `<img src="${s1}" data-fb="${s2}" alt="" ` +
+    `onload="this.previousElementSibling.remove();this.parentNode.style.background='var(--panel)'" onerror="var f=this.dataset.fb;if(f){this.dataset.fb='';this.src=f}else this.remove()"></span>`;
+}
+
+function cmpTable(id, o, S, O, rk) {
+  const n = Math.min(S.gp, O.gp), diff = S.gp !== O.gp && n > 0;
+  let E = null, rkE = null;
+  if (diff) { E = statsAtN(n); const gb = buildModel("game").before[n - 1]; rkE = t => gb.indexOf(t) + 1; }
+  const row = (lbl, f, fE) => `<tr><td>${lbl}</td><td>${f(id, S)}</td><td>${f(o, O)}</td>` +
+    (E ? `<td class="sep">${fE(id)}</td><td>${fE(o)}</td>` : "") + `</tr>`;
+  let h = `<table class="cmp"><tr><th></th><th colspan="2">Aktuell</th>${E ? `<th colspan="2" class="sep">Nach ${n} Spielen</th>` : ""}</tr>` +
+    `<tr><th></th><th>${id}</th><th>${o}</th>${E ? `<th class="sep">${id}</th><th>${o}</th>` : ""}</tr>` +
+    row("Platz", t => rk(t), t => rkE(t)) +
+    row("Punkte", (t, X) => X.p, t => E[t].p) +
+    row("Tordifferenz", (t, X) => sg(X.gd), t => sg(E[t].gd)) +
+    row("Spiele", (t, X) => X.gp, t => E[t].gp) + `</table>`;
+  if (diff) h += `<p class="note">${S.gp > O.gp ? id : o} hat ${Math.abs(S.gp - O.gp)} Spiel${Math.abs(S.gp - O.gp) === 1 ? "" : "e"} mehr – rechts der Vergleich bei gleicher Spielzahl.</p>`;
+  return h;
+}
+
+function togglePanelDetails() { panelDetails = !panelDetails; selectFn(selected); }
+
+function panelHTML(id, order) {
+  const st = currentStats(), rk = t => order.indexOf(t) + 1, S = st[id];
+  const pl = n => n === 1 ? "Punkt" : "Punkte";
+  const stat = t => `Platz ${rk(t)} · ${st[t].p} Pkt · TD ${sg(st[t].gd)} · ${st[t].gp} Sp.`;
+
+  // cid holt auf tid auf
+  const chase = (cid, tid) => {
+    const C = st[cid], T = st[tid], gap = T.p - C.p, d = T.gd - C.gd;
+    const g = Math.ceil(gap / 3);
+    const hint = gap < 3 ? "ein Sieg überholt" : gap === 3 ? "ein Sieg → Gleichstand" : `mind. ${g} Spiele`;
+    const pts = gap === 0 ? "Punktgleich – ein Sieg überholt" : `+${gap} ${pl(gap)} bis Gleichstand (${hint})`;
+    const td = d < 0 ? `TD ${sg(C.gd)} schon besser als ${sg(T.gd)} → bei Gleichstand vor ${tid}` :
+               d === 0 ? `TD gleich → dann zählen die Tore (${C.gf}:${T.gf})` :
+               `TD ${d} schlechter → Tordifferenz müsste um mind. ${d + 1} steigen`;
+    // rot: ein Sieg reicht | gelb: Sieg + Tordifferenz nötig | grau: nicht in einem Spiel erreichbar
+    let cls = gap < 3 || (gap === 3 && d <= 0) ? "hot" : gap === 3 ? "warm" : "far";
+    const more = C.gp > T.gp ? C.gp - T.gp : 0;       // Angreifer hat schon mehr Spiele gespielt -> nicht akut
+    if (more) cls = "far";
+    return { gap, cls, pts, td, more };
+  };
+  const nextOpp = t => { const f = nextFx(t); return f ? (f.h === t ? f.a : f.h) : null; };
+  const oppCell = t => { const o = nextOpp(t); return !o ? "–" : o === id ? `<span class="gp">Duell</span>` : logoHTML(o, 20); };
+  const chip = (txt, cls) => `<span class="chip c-${cls}">${txt}</span>`;
+  // Punkte-Abstand: Verfolger 0 rot, 1-2 orange, 3 gelb | Reichweite 0 grün, 1-2 gelb, 3 orange | sonst grau
+  const ptsCls = (t, kind, c) => {
+    if (c.more) return "grey";                                   // hat schon mehr Spiele -> nicht akut
+    const gap = kind === "below" ? S.p - st[t].p : st[t].p - S.p;
+    if (kind === "below") return gap === 0 ? "red" : gap <= 2 ? "orange" : gap === 3 ? "yellow" : "grey";
+    return gap === 0 ? "green" : gap <= 2 ? "yellow" : gap === 3 ? "orange" : "grey";
+  };
+  const tdCls = t => { const d = st[t].gd - S.gd; return d > 0 ? "green" : d < 0 ? "red" : "grey"; };
+  const wirRow = `<tr class="wir"><td class="tm"><span class="tmi">${logoHTML(id, 22)}<b>WIR</b></span></td>` +
+    `<td>${rk(id)}</td><td>${S.p}</td><td>${sg(S.gd)}</td><td>${oppCell(id)}</td></tr>`;
+  const listHTML = (items, who, kind) => {
+    if (!items.length) return `<div class="note">Niemand in Reichweite (${AUFHOL_PUNKTE} Punkte).</div>`;
+    const wirTop = kind === "below";
+    return `<table class="lst"><tr><th></th><th>Pl</th><th>Pkt</th><th>TD</th><th>Gegner</th></tr>` + (wirTop ? wirRow : "") +
+      items.map(({ t, c }) => {
+        const w = who || t, dg = Math.abs(st[t].gp - S.gp), sp = dg === 1 ? "" : "e";
+        const gpTag = st[t].gp !== S.gp ? ` <span class="gp">${st[t].gp} Sp.</span>` : "";
+        let r = `<tr><td class="tm"><span class="tmi">${logoHTML(t, 22)}<b>${t}</b>` +
+          (panelDetails ? ` <span class="gp">${DATA.teams[t].name}</span>` : "") + `${gpTag}</span></td>` +
+          `<td>${rk(t)}</td><td>${chip(st[t].p, ptsCls(t, kind, c))}</td><td><b class="t-${tdCls(t)}">${sg(st[t].gd)}</b></td><td>${oppCell(t)}</td></tr>`;
+        if (panelDetails) {
+          const note = c.more ? ` ${w} hat bereits ${c.more} Spiel${c.more === 1 ? "" : "e"} mehr gespielt → kein akuter Angreifer.` :
+            st[t].gp !== S.gp ? ` ${t} hat ${dg} Spiel${sp} ${st[t].gp > S.gp ? "mehr" : "weniger"}.` : "";
+          r += `<tr class="det"><td colspan="5">${w} ${c.pts}. ${c.td}.${note}</td></tr>`;
+        }
+        return r;
+      }).join("") + (wirTop ? "" : wirRow) + `</table>`;
+  };
+  const sw = (col, t) => `<span><i style="background:${col}"></i>${t}</span>`;
+  const RED = "#c1121f", ORG = "#f08a24", YEL = "#f2c94c", GRN = "#2e9e5b", GRY = "var(--muted)";
+  const tdLegend = `${sw(GRN, "TD besser")}${sw(RED, "TD schlechter")}`;
+
+  const others = DATA.startTabelle.filter(t => t !== id);
+  const below = others.filter(t => rk(t) > rk(id) && S.p - st[t].p <= AUFHOL_PUNKTE)
+    .map(t => ({ t, c: chase(t, id) })).sort((x, y) => rk(x.t) - rk(y.t));
+  const above = others.filter(t => rk(t) < rk(id) && st[t].p - S.p <= AUFHOL_PUNKTE)
+    .map(t => ({ t, c: chase(id, t) })).sort((x, y) => rk(x.t) - rk(y.t));
+
+  const fx = nextFx(id);
+  let next = `<div class="note">Kein weiteres Spiel eingetragen.</div>`;
+  if (fx) {
+    const o = fx.h === id ? fx.a : fx.h, O = st[o];
+    const dt = String(fx.datum).replace(/^(\d{1,2}\.\d{1,2}\.)\d{2}(\d{2})$/, "$1$2");
+    let wann = dt ? dt + " · " : "", cdHTML = "";
+    if (fx.utc) {
+      const d = new Date(fx.utc), tag = tagBerlin(d), heute = tagBerlin(new Date()) === tag, morgen = tagBerlin(new Date(Date.now() + 864e5)) === tag;
+      wann = `${heute ? "Heute, " : morgen ? "Morgen, " : ""}${dt} · ${uhrBerlin(d)} Uhr · `;
+      if (heute) cdHTML = `<div class="cd" id="cd" data-utc="${fx.utc}"></div>`;
+    }
+    next = `<div class="fx">${logoHTML(id, 30)}<span>${id} vs ${o}</span>${logoHTML(o, 30)}` +
+      `<small>${wann}${fx.h === id ? "Heim" : "Auswärts"}</small></div>` + cdHTML +
+      cmpTable(id, o, S, O, rk) + "";
+  }
+
+  return `<div class="pn-head">${logoHTML(id, 40)}<div><b>${DATA.teams[id].name}</b>` +
+    `<small>${S.gp} Spiele · ${S.p} Punkte · Platz ${rk(id)}</small></div>` +
+    `<button class="tg" type="button" onclick="togglePanelDetails()">${panelDetails ? "Details aus" : "Details"}</button></div>` +
+    `<div class="card"><h3>Nächstes Spiel</h3>${next}</div>` +
+    `<div class="card"><h3>Gefährliche Verfolger</h3>` +
+    `<div class="lk">Pkt-Abstand: ${sw(RED, "0")}${sw(ORG, "1–2")}${sw(YEL, "3")}${sw(GRY, "4+ / mehr Spiele")}</div><div class="lk">${tdLegend}</div>` +
+    listHTML(below, null, "below") +
+    `<p class="note">Annahme: ${id} holt nichts mehr.</p></div>` +
+    `<div class="card"><h3>In Reichweite nach oben</h3>` +
+    `<div class="lk">Pkt-Abstand: ${sw(GRN, "0")}${sw(YEL, "1–2")}${sw(ORG, "3")}${sw(GRY, "4+ / mehr Spiele")}</div><div class="lk">${tdLegend}</div>` +
+    listHTML(above, id, "above") +
+    `<p class="note">Annahme: die Mannschaft darüber holt nichts mehr.</p></div>`;
 }
 
 /* Intervalle (lo..hi) so auf Bahnen verteilen, dass sich nichts überlappt */
@@ -231,37 +464,150 @@ function el(name, attrs = {}, parent) {
 }
 
 /* Logo-Bubble mit Ergebnisring und Fallback (Farbkreis + Kürzel) */
-function bubble(g, id, r, ring, sw) {
+function bubble(g, id, r, ring, sw, dash, fade) {
   const t = DATA.teams[id], clipId = "c" + (uid++), inner = r - sw;
   const cp = el("clipPath", { id: clipId }, g);
   el("circle", { r: inner }, cp);
-  el("circle", { r: r - sw / 2, fill: "var(--panel)", stroke: ring, "stroke-width": sw }, g);
+  const rc = el("circle", { r: r - sw / 2, fill: "var(--panel)", stroke: ring, "stroke-width": sw }, g);
+  if (dash) rc.setAttribute("stroke-dasharray", dash);
   const base = el("circle", { r: inner, fill: t.farbe }, g);
   const fs = id.length >= 3 ? r * 0.62 : id.length === 2 ? r * 0.8 : r;
   const letter = el("text", { class: "fallback-tx", "font-size": Math.round(fs * 10) / 10 }, g);
   letter.textContent = id;
   const img = el("image", {
-    href: DATA.logoPfad + id + DATA.logoEndung,
+    href: logoSrcs(id)[0],
     x: -inner, y: -inner, width: 2 * inner, height: 2 * inner,
     "clip-path": `url(#${clipId})`, preserveAspectRatio: "xMidYMid slice"
   }, g);
+  if (fade) [base, letter, img].forEach(e => e.setAttribute("opacity", 0.5));
   img.addEventListener("load", () => { base.remove(); letter.remove(); });
-  img.addEventListener("error", () => img.remove());
+  img.addEventListener("error", () => { const fb = logoSrcs(id)[1]; if (fb && img.getAttribute("href") !== fb) img.setAttribute("href", fb); else img.remove(); });
 }
 
 function buildChrome() {
   document.getElementById("title").textContent = DATA.titel;
-  const btn = document.getElementById("myBtn");
-  btn.textContent = "★ " + DATA.teams[myTeam].name;
-  btn.onclick = ev => { ev.stopPropagation(); selectFn(selected === myTeam ? null : myTeam); };
+  document.getElementById("ladBtn").onclick = ev => { ev.stopPropagation(); ladderPair = !ladderPair; render(); };
   const items = [["gold", "Sieg"], ["silber", "Sieg n. V."], ["bronze", "Niederl. n. V."], ["niete", "Niederlage"]];
   document.getElementById("legend").innerHTML = items.map(([k, t]) =>
-    `<span><i style="border-color:${MEDAILLEN[k]}"></i>${t}</span>`).join("");
+    `<span><i style="border-color:${MEDAILLEN[k]}"></i>${t}</span>`).join("") +
+    `<span><i style="border-style:dashed;border-color:var(--muted)"></i>noch offen</span>`;
+  document.querySelectorAll("#mode button").forEach(b => {
+    b.classList.toggle("on", b.dataset.m === mode);
+    b.onclick = () => {
+      mode = b.dataset.m;
+      document.querySelectorAll("#mode button").forEach(x => x.classList.toggle("on", x === b));
+      render();
+      document.getElementById("scroll").scrollLeft = 1e6;
+    };
+  });
+}
+
+/* ============ Punkteleiter ============
+   Zeilen = Punkte (0 .. Maximum), Mannschaften mit gleichen Punkten stehen nebeneinander.
+   Optional parallel: Stand, wenn jede Mannschaft nur ihre ersten n Spiele hätte (n = kleinste Spielzahl). */
+function ladderData() {
+  const ids = DATA.startTabelle, cur = currentStats();
+  const M = buildModel("date"), order1 = M.before[M.cols - 1];
+  const gps = ids.map(t => cur[t].gp), nMin = Math.min(...gps), gMax = Math.max(...gps);
+  const canPair = nMin > 0 && nMin < gMax;
+  return {
+    cur, order1, nMin, gMax, canPair,
+    st2: canPair ? statsAtN(nMin) : null,
+    order2: canPair ? buildModel("game").before[nMin - 1] : null
+  };
+}
+
+function renderLadder() {
+  const L = ladderData(), ids = DATA.startTabelle, pair = ladderPair && L.canPair;
+  const wrapEl = document.getElementById("wrap"), scrollEl = document.getElementById("scroll");
+  const svg = document.getElementById("chart"), panel = document.getElementById("panel"), ax = document.getElementById("axis");
+  const lb = document.getElementById("ladBtn");
+  lb.disabled = !L.canPair;
+  lb.textContent = !L.canPair ? "alle gleich viele Spiele" : pair ? "− gleiche Spielzahl" : `+ gleiche Spielzahl (${L.nMin} Sp.)`;
+  panel.hidden = true; svg.style.display = "block";
+
+  const p1 = t => L.cur[t].p, p2 = t => L.st2[t].p;
+  const hi = Math.max(...ids.map(p1));
+  const minAll = Math.min(...ids.map(p1), ...(pair ? ids.map(p2) : [Infinity]));
+  const top = wrapEl.getBoundingClientRect().top + window.scrollY;
+  const avail = window.innerHeight - top - 14, HEAD = 34;
+  let lo = 0;                                           // bei Platzmangel leere untere Zeilen ausblenden
+  while ((hi - lo + 1) * 18 > avail - HEAD && lo < minAll - 1) lo++;
+  const rows = hi - lo + 1;
+  const ROW_H = Math.max(18, Math.min(34, Math.floor((avail - HEAD) / rows)));
+  const R = Math.max(7, Math.min(14, Math.floor(ROW_H * 0.42)));
+  const H = HEAD + rows * ROW_H + 4;
+  const W = Math.max(scrollEl.clientWidth || 280, 200), pw = pair ? W / 2 : W;
+  const y = pt => HEAD + (hi - pt + 0.5) * ROW_H;
+
+  // linke Achse: Punkte
+  ax.setAttribute("width", AXIS_W); ax.setAttribute("height", H); ax.innerHTML = "";
+  for (let pt = hi; pt >= lo; pt--) {
+    el("line", { x1: 0, x2: AXIS_W, y1: y(pt), y2: y(pt), class: "grid-line" }, ax);
+    el("text", { x: AXIS_W - 10, y: y(pt), class: "rank-label", "text-anchor": "end", "font-size": 11, style: pt % 5 === 0 ? "font-weight:700" : "" }, ax).textContent = pt;
+  }
+  el("text", { x: AXIS_W / 2, y: 22, class: "day-label" }, ax).textContent = "Punkte";
+
+  svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.innerHTML = "";
+  for (let pt = hi; pt >= lo; pt--) el("line", { x1: 0, x2: W, y1: y(pt), y2: y(pt), class: "grid-line" }, svg);
+  el("text", { x: pw / 2, y: 15, class: "day-label", style: "font-weight:700" }, svg).textContent = pair ? "Aktuell" : "Aktueller Stand";
+  const fewer = ids.some(t => L.cur[t].gp < L.gMax);
+  if (fewer) el("text", { x: pw / 2, y: 28, class: "date-label", style: "font-size:9px" }, svg).textContent = "gestrichelt = weniger Spiele";
+  if (pair) {
+    el("line", { x1: pw, x2: pw, y1: 0, y2: H, class: "grid-line", style: "stroke-width:2" }, svg);
+    el("text", { x: pw + pw / 2, y: 15, class: "day-label", style: "font-weight:700" }, svg).textContent = `Nach ${L.nMin} Spielen`;
+  }
+  const gLink = el("g", { style: "pointer-events:none" }, svg), gTeams = el("g", {}, svg);
+  const teamEls = [], pos = [{}, {}];
+
+  const place = (k, ptsOf, order) => {
+    const groups = {};
+    ids.forEach(t => (groups[ptsOf(t)] = groups[ptsOf(t)] || []).push(t));
+    Object.entries(groups).forEach(([pt, list]) => {
+      list.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+      const sp = Math.min(2 * R + 4, (pw - 14) / list.length);
+      list.forEach((t, i) => {
+        const cx = k * pw + pw / 2 + (i - (list.length - 1) / 2) * sp, cy = y(+pt);
+        const g = el("g", { class: "team" }, gTeams);
+        g.dataset.id = t; g.dataset.cx = cx; g.dataset.cy = cy;
+        el("title", {}, g).textContent = `${DATA.teams[t].name}: ${pt} Pkt`;
+        bubble(g, t, R, DATA.teams[t].farbe, 2, k === 0 && L.cur[t].gp < L.gMax ? "3 2" : null);
+        g.setAttribute("transform", `translate(${cx},${cy})`);
+        g.addEventListener("click", ev => { ev.stopPropagation(); select(selected === t ? null : t); });
+        teamEls.push(g); pos[k][t] = [cx, cy];
+      });
+    });
+  };
+  place(0, p1, L.order1);
+  if (pair) place(1, p2, L.order2);
+
+  function select(id) {
+    selected = id;
+    svg.classList.toggle("dim", !!id);
+    gLink.innerHTML = "";
+    teamEls.forEach(g => {
+      const on = g.dataset.id === id;
+      g.classList.toggle("sel", on);
+      g.setAttribute("transform", `translate(${g.dataset.cx},${g.dataset.cy}) scale(${on ? 1.6 : 1})`);
+      if (on) gTeams.appendChild(g);
+    });
+    if (id && pair) {
+      const [a, b] = [pos[0][id], pos[1][id]];
+      el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: DATA.teams[id].farbe, "stroke-width": 3, "stroke-dasharray": "5 4" }, gLink);
+    }
+  }
+  selectFn = select;
+  wrapEl.onclick = () => select(null);
+  select(selected);
 }
 
 function render() {
-  const before = computeRanks(DATA);
-  const days = DATA.spieltage.length, N = DATA.startTabelle.length, cols = days + 1;
+  document.getElementById("ladBtn").hidden = mode !== "ladder";
+  if (mode === "ladder") { renderLadder(); return; }
+  const teamMode = mode === "team";
+  const M = buildModel(teamMode ? "date" : mode), before = M.before, cols = M.cols;
+  const N = DATA.startTabelle.length, last = before[cols - 1];
+  const nMatchCols = M.matches.length;
 
   // Höhe so wählen, dass die Tabelle auf den Bildschirm passt
   const wrap = document.getElementById("wrap");
@@ -271,75 +617,95 @@ function render() {
   const R = Math.max(8, Math.min(16, Math.floor(ROW_H * 0.42)));
   const SW = Math.max(2, Math.round(R * 0.2));
   const H = TOP + N * ROW_H + 4;
-  const W = cols * COL_W;
+  const W = Math.max(cols * COL_W, 10);
 
   const rank = (c, id) => before[c].indexOf(id);
   const x = c => COL_W * (c + 0.5);
   const y = r => TOP + ROW_H * (r + 0.5);
 
-  /* --- Bahnen & Ergebnisse je Spieltag --- */
-  const matchLanes = [], offTeam = [], transOff = [], res = [];
+  /* --- Bahnen je Spalte --- */
+  const matchLanes = [], offTeam = [], transOff = [];
   const laneSp = 7;
-  for (let c = 0; c < days; c++) {
-    const items = DATA.spieltage[c].map(([h, a, gh, ga, ot]) => {
-      const rh = rank(c, h), ra = rank(c, a);
-      return { h, a, gh, ga, ot: ot||"", lo: Math.min(rh, ra), hi: Math.max(rh, ra) };
-    });
-    const n = assignLanes(items);
-    offTeam[c] = {}; res[c] = {};
-    items.forEach(it => {
-      it.off = (it.lane - (n - 1) / 2) * laneSp;
-      offTeam[c][it.h] = offTeam[c][it.a] = it.off;
-      const [ph, pa] = pointsOf(it.gh, it.ga, it.ot);
-      res[c][it.h] = ph; res[c][it.a] = pa;
-    });
-    matchLanes[c] = items;
-    const moves = DATA.startTabelle.map(id => {
-      const r0 = rank(c, id), r1 = rank(c + 1, id);
-      return { id, lo: Math.min(r0, r1), hi: Math.max(r0, r1), moves: r0 !== r1 };
-    }).filter(m => m.moves);
-    const nt = assignLanes(moves);
-    const sp = Math.min(4, (COL_W * 0.35) / Math.max(nt, 1));
-    transOff[c] = {};
-    moves.forEach(m => transOff[c][m.id] = (m.lane - (nt - 1) / 2) * sp);
+  for (let c = 0; c < cols; c++) {
+    offTeam[c] = {};
+    if (c < nMatchCols) {
+      const items = M.matches[c].map(([h, a, gh, ga, ot, utc]) => {
+        const rh = rank(c, h), ra = rank(c, a);
+        return { h, a, gh, ga, ot: ot || "", utc, future: gh === undefined, lo: Math.min(rh, ra), hi: Math.max(rh, ra) };
+      });
+      const n = assignLanes(items);
+      items.forEach(it => {
+        it.off = (it.lane - (n - 1) / 2) * laneSp;
+        offTeam[c][it.h] = offTeam[c][it.a] = it.off;
+      });
+      matchLanes[c] = items;
+    }
+    if (c < cols - 1) {
+      const moves = DATA.startTabelle.map(id => {
+        const r0 = rank(c, id), r1 = rank(c + 1, id);
+        return { id, lo: Math.min(r0, r1), hi: Math.max(r0, r1), moves: r0 !== r1 };
+      }).filter(m => m.moves);
+      const nt = assignLanes(moves);
+      const sp = Math.min(4, (COL_W * 0.35) / Math.max(nt, 1));
+      transOff[c] = {};
+      moves.forEach(m => transOff[c][m.id] = (m.lane - (nt - 1) / 2) * sp);
+    }
   }
-  offTeam[days] = {};
 
-  /* --- Linke Achse (bleibt beim Scrollen stehen) --- */
+  /* --- Linke Achse / Tabelle (bleibt beim Scrollen stehen, Zeilen antippbar) --- */
   const ax = document.getElementById("axis");
   ax.setAttribute("width", AXIS_W); ax.setAttribute("height", H);
   ax.innerHTML = "";
   const rankFs = Math.min(13, Math.max(9, ROW_H * 0.4)), AR = Math.min(R, 13);
+  const axRows = {};
   for (let r = 0; r < N; r++) {
+    const id = last[r];
+    const hl = el("rect", { x: 0, y: y(r) - ROW_H / 2, width: AXIS_W, height: ROW_H, class: "axrow" }, ax);
     el("line", { x1: 0, x2: AXIS_W, y1: y(r), y2: y(r), class: "grid-line" }, ax);
     el("text", { x: 14, y: y(r), class: "rank-label", "font-size": rankFs }, ax).textContent = r + 1;
-    const id = before[days][r];
     const g = el("g", { transform: `translate(${AXIS_W - 6 - AR},${y(r)})` }, ax);
     bubble(g, id, AR, DATA.teams[id].farbe, 2);
+    const hit = el("rect", { x: 0, y: y(r) - ROW_H / 2, width: AXIS_W, height: ROW_H, fill: "transparent", style: "cursor:pointer" }, ax);
+    hit.addEventListener("click", ev => { ev.stopPropagation(); select(teamMode || selected !== id ? id : null); });
+    axRows[id] = hl;
   }
   el("text", { x: AXIS_W / 2, y: 26, class: "day-label" }, ax).textContent = "Stand";
 
+  const svg = document.getElementById("chart"), panel = document.getElementById("panel");
+  const wrapEl = document.getElementById("wrap");
+
+  /* --- Mannschafts-Ansicht --- */
+  if (teamMode) {
+    svg.style.display = "none"; panel.hidden = false; panel.style.height = H + "px";
+    selectFn = select;
+    wrapEl.onclick = null;
+    select(selected || last[0]);
+    return;
+  }
+  svg.style.display = "block"; panel.hidden = true;
+
   /* --- Hauptdiagramm --- */
-  const svg = document.getElementById("chart");
   svg.setAttribute("width", W); svg.setAttribute("height", H);
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   svg.innerHTML = "";
+  if (M.futureFrom !== undefined) el("rect", { x: M.futureFrom * COL_W, y: 0, width: W - M.futureFrom * COL_W, height: H, class: "fut-band" }, svg);
   for (let r = 0; r < N; r++)
     el("line", { x1: 0, x2: W, y1: y(r), y2: y(r), class: "grid-line" }, svg);
   for (let c = 0; c < cols; c++) {
-    el("text", { x: x(c), y: 18, class: "day-label" }, svg).textContent = c < days ? c + 1 : "Ende";
-    const dt = DATA.datum && DATA.datum[c];
-    if (c < days && dt) el("text", { x: x(c), y: 32, class: "date-label" }, svg).textContent = fmtDatum(dt);
+    const isEnd = M.finalCol && c === cols - 1;
+    el("text", { x: x(c), y: 18, class: "day-label" }, svg).textContent = isEnd ? "Ende" : c + 1;
+    const dt = M.datum && M.datum[c];
+    if (!isEnd && dt) el("text", { x: x(c), y: 32, class: "date-label" }, svg).textContent = fmtDatum(dt);
   }
 
   const gPaths = el("g", {}, svg), gConn = el("g", {}, svg),
-        gTeams = el("g", {}, svg), gRes = el("g", {}, svg);
+        gTeams = el("g", {}, svg), gRes = el("g", {}, svg), gExtra = el("g", { style: "pointer-events:none" }, svg);
   const pathEls = {}, connEls = [], teamEls = [], pills = [], teamAt = [];
 
   DATA.startTabelle.forEach(id => {
     const px = c => x(c) + (offTeam[c][id] || 0);
     let d = `M ${px(0)} ${y(rank(0, id))}`;
-    for (let c = 0; c < days; c++) {
+    for (let c = 0; c < cols - 1; c++) {
       const y0 = y(rank(c, id)), y1 = y(rank(c + 1, id));
       const xm = x(c) + COL_W / 2 + (transOff[c][id] || 0);
       d += ` L ${xm} ${y0} L ${xm} ${y1} L ${px(c + 1)} ${y1}`;
@@ -348,10 +714,12 @@ function render() {
   });
 
   const pillH = Math.min(18, Math.max(13, ROW_H * 0.6)), pillFs = Math.round(pillH * 0.62);
+  const otTxt = ot => ot ? " " + String(ot).trim() : "";
   matchLanes.forEach((items, c) => items.forEach(it => {
     const yh = y(rank(c, it.h)), ya = y(rank(c, it.a)), cx = x(c) + it.off;
     const line = el("line", { x1: cx, x2: cx, y1: yh, y2: ya, class: "conn" }, gConn);
     line.dataset.ids = it.h + "," + it.a;
+    if (it.future) line.setAttribute("stroke-dasharray", "4 3");
     connEls.push(line);
     const g = el("g", { class: "resgrp" }, gRes);
     const rect = el("rect", { y: (yh + ya) / 2 - pillH / 2, height: pillH, rx: pillH / 2, class: "res-bg" }, g);
@@ -361,18 +729,20 @@ function render() {
 
   for (let c = 0; c < cols; c++) {
     teamAt[c] = {};
-    const playing = new Set(c < days ? matchLanes[c].flatMap(m => [m.h, m.a]) : DATA.startTabelle);
+    const isEnd = M.finalCol && c === cols - 1;
     DATA.startTabelle.forEach(id => {
       const cx = x(c) + (offTeam[c][id] || 0), cy = y(rank(c, id));
+      const gm = isEnd ? null : M.tg[c] && M.tg[c][id];
       const g = el("g", { class: "team" }, gTeams);
       g.dataset.id = id; g.dataset.cx = cx; g.dataset.cy = cy;
-      g.dataset.dot = playing.has(id) ? "0" : "1";
+      g.dataset.dot = (isEnd || gm) ? "0" : "1";
       el("title", {}, g).textContent = DATA.teams[id].name;
-      if (playing.has(id)) {
-        if (c < days) { const p = res[c][id]; bubble(g, id, R, ringOf(p), p === 0 ? Math.max(1.5, SW - 1) : SW); }
-        else bubble(g, id, R, "var(--muted)", Math.max(1.5, SW - 1));
-      } else {
-        el("circle", { r: 2.5, fill: DATA.teams[id].farbe }, g);
+      if (isEnd) bubble(g, id, R, "var(--muted)", Math.max(1.5, SW - 1));
+      else if (gm && gm.future) bubble(g, id, R, "var(--muted)", Math.max(1.5, SW - 1), "3 2", true);
+      else if (gm) bubble(g, id, R, ringOf(gm.pts), gm.pts === 0 ? Math.max(1.5, SW - 1) : SW);
+      else {
+        // kein Spiel in dieser Spalte: Kalender = kleiner Punkt, Spieltag = ausgegraut
+        el("circle", { r: mode === "game" ? 3 : 2.5, fill: DATA.teams[id].farbe, opacity: mode === "game" ? 0.35 : 1 }, g);
         el("circle", { r: 8, fill: "transparent" }, g);      // größere Tipp-Fläche
       }
       g.setAttribute("transform", `translate(${cx},${cy})`);
@@ -381,46 +751,131 @@ function render() {
     });
   }
 
-  /* --- Auswahl: Mannschaft groß, Gegner mittel, Ergebnisse sichtbar --- */
+  selectFn = select;
+  wrapEl.onclick = () => select(null);
+  select(selected);
+
+  /* --- Auswahl --- */
   function setScale(g, k) {
     g.setAttribute("transform", `translate(${g.dataset.cx},${g.dataset.cy}) scale(${k})`);
   }
   function select(id) {
+    if (teamMode) {                                    // Mannschafts-Ansicht: immer eine Mannschaft aktiv
+      selected = id || last[0];
+      Object.entries(axRows).forEach(([k, r]) => r.classList.toggle("sel", k === selected));
+      panel.innerHTML = panelHTML(selected, last);
+      tickCountdown();
+      return;
+    }
     selected = id;
     svg.classList.toggle("dim", !!id);
-    document.getElementById("myBtn").classList.toggle("on", id === myTeam);
+    Object.entries(axRows).forEach(([k, r]) => r.classList.toggle("sel", k === id));
     teamEls.forEach(g => { g.classList.remove("sel", "opp"); setScale(g, 1); });
     pills.forEach(p => p.g.classList.remove("sel"));
+    gExtra.innerHTML = "";
     connEls.forEach(e => e.classList.toggle("sel", !!id && e.dataset.ids.split(",").includes(id)));
     Object.entries(pathEls).forEach(([k, p]) => {
       p.classList.toggle("sel", k === id);
       if (k === id) gPaths.appendChild(p);
     });
     if (!id) return;
+    // Datum-Ansicht: Gegner in derselben Spalte, Ergebnis auf der Verbindung
     pills.forEach(p => {
       const { h, a, gh, ga, ot } = p.it;
       if (h !== id && a !== id) return;
       const own = h === id ? gh : ga, opp = h === id ? ga : gh;
       const og = teamAt[p.c][h === id ? a : h];
       og.classList.add("opp"); setScale(og, 1.35); gTeams.appendChild(og);
-      const txt = `${own}:${opp}${ot ? ot : ""}`, w = 10 + txt.length * pillFs * 0.62;
+      const txt = p.it.future ? (p.it.utc ? uhrBerlin(new Date(p.it.utc)) : "–:–") : `${own}:${opp}${otTxt(ot)}`, w = 10 + txt.length * pillFs * 0.62;
       p.text.textContent = txt;
       p.rect.setAttribute("x", p.cx - w / 2); p.rect.setAttribute("width", w);
       p.g.classList.add("sel");
     });
+    // Spieltag-Ansicht: Gegner spielt evtl. in anderer Spalte -> kleines Logo + Ergebnis am Kreis
+    if (mode === "game") {
+      for (let c = 0; c < cols; c++) {
+        const gm = M.tg[c] && M.tg[c][id];
+        if (!gm) continue;
+        const base = teamAt[c][id], cx = +base.dataset.cx, cy = +base.dataset.cy, mR = Math.max(7, R * 0.7);
+        const og = el("g", { transform: `translate(${cx + 1.8 * R + mR * 0.9},${cy})` }, gExtra);
+        if (gm.future) bubble(og, gm.oppId, mR, "var(--muted)", 1.5, "3 2", true);
+        else bubble(og, gm.oppId, mR, ringOf(pointsOf(gm.own, gm.opp, !!gm.ot)[1]), 1.5);
+        const txt = gm.future ? `${fmtDatum(gm.datum)}${gm.utc ? " " + uhrBerlin(new Date(gm.utc)) : ""}` : `${gm.own}:${gm.opp}${otTxt(gm.ot)}`, w = 10 + txt.length * pillFs * 0.62, py = cy + 1.8 * R + 1;
+        el("rect", { x: cx - w / 2, y: py - pillH / 2, width: w, height: pillH, rx: pillH / 2, class: "res-bg" }, gExtra);
+        el("text", { x: cx, y: py, class: "res-tx", "font-size": pillFs }, gExtra).textContent = txt;
+      }
+    }
     teamEls.filter(g => g.dataset.id === id).forEach(g => {
       g.classList.add("sel"); setScale(g, g.dataset.dot === "1" ? 2.2 : 1.8); gTeams.appendChild(g);
     });
   }
-  selectFn = select;
-  document.getElementById("wrap").onclick = () => select(null);
-  select(selected);
 }
 
-buildChrome();
-render();
-document.getElementById("scroll").scrollLeft = 1e6;   // zuletzt gespielte Spieltage zeigen
+/* ============ Laden ============ */
+const CACHE_KEY = `tabellenverlauf-${LIGA}-${SAISON}`;
+let geladen = false, letzterAbruf = 0;
+const stand = (ts, extra) => document.getElementById("status").textContent =
+  "Stand " + new Date(ts).toLocaleString("de-DE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) + (extra || "");
+
+/* Datei.html#RBM -> Mannschafts-Ansicht mit dieser Mannschaft (Kürzel, Groß-/Kleinschreibung egal) */
+function hashTeam() {
+  let h = ""; try { h = decodeURIComponent(location.hash.slice(1)).toUpperCase(); } catch (e) {}
+  return DATA.startTabelle.find(t => t.toUpperCase() === h) || null;
+}
+
+function zeigen(pack, ts, extra) {
+  const sc = document.getElementById("scroll"), first = !geladen, l = sc.scrollLeft;
+  setData(pack);
+  if (first) { const h = hashTeam(); if (h) { selected = h; mode = "team"; } }
+  buildChrome(); render();
+  sc.scrollLeft = first ? 1e6 : l;          // beim ersten Mal ans Ende (letzte Spieltage)
+  geladen = true; stand(ts, extra);
+}
+
+async function laden() {
+  const st = document.getElementById("status"), btn = document.getElementById("reload"), box = document.getElementById("debug");
+  const info = [`URL: ${API_URL}`, `Seite: ${location.protocol}//${location.host || "(Datei)"} | online: ${navigator.onLine}`];
+  let phase = "Abruf (fetch)";
+  btn.disabled = true;
+  if (!geladen) st.textContent = "lädt …";
+  try {
+    const r = await fetch(API_URL);
+    info.push(`HTTP ${r.status} ${r.statusText} | type: ${r.type} | content-type: ${r.headers.get("content-type")}`);
+    phase = "Antwort lesen";
+    const txt = await r.text();
+    info.push(`Antwort: ${txt.length} Zeichen`, `Anfang: ${txt.slice(0, 300)}`);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    phase = "JSON lesen";
+    const json = JSON.parse(txt);
+    info.push(`Spiele in der Antwort: ${json.length}`);
+    phase = "Daten umwandeln";
+    const pack = apiToPack(json);
+    if (!Object.keys(pack.teams).length) throw new Error("keine Spiele gefunden");
+    letzterAbruf = Date.now();
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: letzterAbruf, pack })); } catch (e) {}
+    phase = "Anzeigen (render)";
+    zeigen(pack, letzterAbruf);
+    if (/[?&]debug/.test(location.search)) { box.hidden = false; box.textContent = "OK\n" + info.join("\n"); } else box.hidden = true;
+  } catch (e) {
+    st.textContent = (geladen ? st.textContent + " · " : "") + `Fehler in Phase „${phase}“`;
+    box.hidden = false;
+    box.textContent = `Fehler in Phase: ${phase}\n${e.name}: ${e.message}\n` + info.join("\n") +
+      (e.stack ? "\n--\n" + e.stack.split("\n").slice(0, 4).join("\n") : "");
+  } finally { btn.disabled = false; }
+}
+
+// Start: gespeicherte Daten sofort zeigen, danach frisch von der API laden
+try { const c = JSON.parse(localStorage.getItem(CACHE_KEY)); if (c && c.pack) zeigen(c.pack, c.ts, " (gespeichert)"); } catch (e) {}
+laden();
+document.getElementById("reload").onclick = laden;
+window.addEventListener("hashchange", () => {
+  if (!geladen) return;
+  const h = hashTeam();
+  if (h) { selected = h; mode = "team"; buildChrome(); render(); }
+});
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - letzterAbruf > 120000) laden(); });
 let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => {
+  if (!geladen) return;
   const s = document.getElementById("scroll"), l = s.scrollLeft; render(); s.scrollLeft = l; }, 150); });
 </script>
 </body>
